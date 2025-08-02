@@ -34,9 +34,21 @@ const Dashboard = () => {
       ) : (
         <div className="card mt-3 p-3">
           <p><strong>섭취 요약:</strong> {history.total_intake_text}</p>
-          <p><strong>Macro 균형 적절:</strong> {history.score_macro ? '예' : '아니오'}</p>
-          <p><strong>질병 고려:</strong> {history.score_disease ? '예' : '아니오'}</p>
-          <p><strong>목표 적합:</strong> {history.score_goal ? '예' : '아니오'}</p>
+
+          <hr />
+          <p><strong>✅ Macro ({history.score_macro}/10)</strong></p>
+          <p>📌 {history.reason_macro}</p>
+          <p>👉 {history.advice_macro}</p>
+
+          <p><strong>✅ Disease ({history.score_disease}/10)</strong></p>
+          <p>📌 {history.reason_disease}</p>
+          <p>👉 {history.advice_disease}</p>
+
+          <p><strong>✅ Goal ({history.score_goal}/10)</strong></p>
+          <p>📌 {history.reason_goal}</p>
+          <p>👉 {history.advice_goal}</p>
+
+          <hr />
           <p><strong>총 평가:</strong> {renderGrade(history.total_grade)}</p>
         </div>
       )}

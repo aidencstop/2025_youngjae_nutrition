@@ -21,7 +21,14 @@ const FoodAnalyze = () => {
         setEvaluation(res.data);
         const evalMsg = {
           role: 'bot',
-          text: `오늘의 평가 점수는 ${res.data.grade} 입니다.\n(Macro: ${res.data.score_macro ? '예' : '아니오'}, Disease: ${res.data.score_disease ? '예' : '아니오'}, Goal: ${res.data.score_goal ? '예' : '아니오'})`,
+          text:
+            `오늘의 평가 점수는 ${res.data.grade} 입니다.\n\n` +
+            `✅ Macro (${res.data.score_macro}/10): ${res.data.reason_macro}\n` +
+            `👉 개선 팁: ${res.data.advice_macro}\n\n` +
+            `✅ Disease (${res.data.score_disease}/10): ${res.data.reason_disease}\n` +
+            `👉 개선 팁: ${res.data.advice_disease}\n\n` +
+            `✅ Goal (${res.data.score_goal}/10): ${res.data.reason_goal}\n` +
+            `👉 개선 팁: ${res.data.advice_goal}`,
         };
         setChat((prev) => [...prev, evalMsg]);
       } catch (err) {

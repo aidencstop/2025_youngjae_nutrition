@@ -23,7 +23,7 @@ const NavBar = () => {
         <div className="d-flex">
           {token ? (
             <button className="btn btn-outline-danger" onClick={handleLogout}>로그아웃</button>
-          ) : ( 
+          ) : (
             <>
               <Link to="/login" className="btn btn-outline-primary me-2">로그인</Link>
               <Link to="/register" className="btn btn-outline-success">회원가입</Link>

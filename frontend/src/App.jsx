@@ -8,6 +8,7 @@ import FoodAnalyze from './components/FoodAnalyze';
 import IntakeHistory from './components/IntakeHistory';
 import MyPage from './components/MyPage';
 import PrivateRoute from './routes/PrivateRoute';
+import Navbar from './components/Navbar';  // ✅ 추가
 
 function App() {
   return (
@@ -19,22 +20,34 @@ function App() {
 
         <Route path="/dashboard" element={
           <PrivateRoute>
-            <Dashboard />
+            <>
+              <Navbar />
+              <Dashboard />
+            </>
           </PrivateRoute>
         } />
         <Route path="/analyze" element={
           <PrivateRoute>
-            <FoodAnalyze />
+            <>
+              <Navbar />
+              <FoodAnalyze />
+            </>
           </PrivateRoute>
         } />
         <Route path="/history" element={
           <PrivateRoute>
-            <IntakeHistory />
+            <>
+              <Navbar />
+              <IntakeHistory />
+            </>
           </PrivateRoute>
         } />
         <Route path="/mypage" element={
           <PrivateRoute>
-            <MyPage />
+            <>
+              <Navbar />
+              <MyPage />
+            </>
           </PrivateRoute>
         } />
 

@@ -55,7 +55,37 @@ const IntakeHistory = () => {
           {expanded[record.date] && (
             <div className="mt-2">
               <p><strong>섭취 내용:</strong> {record.total_intake_text}</p>
-              <p>Macro: {record.score_macro ? '예' : '아니오'}, Disease: {record.score_disease ? '예' : '아니오'}, Goal: {record.score_goal ? '예' : '아니오'}</p>
+
+              <p><strong>Macro ({record.score_macro}/10):</strong> {record.reason_macro}</p>
+              <p><em>👉 개선 팁:</em> {record.advice_macro}</p>
+
+              <p><strong>Disease ({record.score_disease}/10):</strong> {record.reason_disease}</p>
+              <p><em>👉 개선 팁:</em> {record.advice_disease}</p>
+
+              <p><strong>Goal ({record.score_goal}/10):</strong> {record.reason_goal}</p>
+              <p><em>👉 개선 팁:</em> {record.advice_goal}</p>
+
+              <hr />
+              <p><strong>📋 평가 시점 내 정보</strong></p>
+              <ul>
+                <li>성별: {record.gender === 'M' ? '남성' : '여성'}</li>
+                <li>나이: {record.age}세</li>
+                <li>키: {record.height}cm</li>
+                <li>체중: {record.weight}kg</li>
+                <li>목표: {{
+                  'loss': '체중 감량',
+                  'maintain': '현상 유지',
+                  'gain': '근육 증량'
+                }[record.diet_goal]}</li>
+              </ul>
+
+              <p><strong>📌 건강 상태:</strong> {
+                Object.entries(record)
+                  .filter(([k, v]) => k.startsWith('has_') && v)
+                  .map(([k]) => k.replace('has_', '').replace(/_/g, ' '))
+                  .map((label) => label.charAt(0).toUpperCase() + label.slice(1))
+                  .join(', ') || '없음'
+              }</p>
             </div>
           )}
         </div>
