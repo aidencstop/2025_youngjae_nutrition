@@ -104,10 +104,42 @@ class DailyHistory(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     date = models.DateField()
     total_intake_text = models.TextField()
-    score_macro = models.BooleanField()
-    score_disease = models.BooleanField()
-    score_goal = models.BooleanField()
-    total_grade = models.CharField(max_length=1)  # A~D
+
+    # 점수 및 등급
+    score_macro = models.IntegerField()
+    score_disease = models.IntegerField()
+    score_goal = models.IntegerField()
+    total_grade = models.CharField(max_length=1)
+
+    # GPT 사유 + 조언
+    reason_macro = models.TextField(blank=True)
+    reason_disease = models.TextField(blank=True)
+    reason_goal = models.TextField(blank=True)
+
+    advice_macro = models.TextField(blank=True)
+    advice_disease = models.TextField(blank=True)
+    advice_goal = models.TextField(blank=True)
+
+    # 사용자 스냅샷
+    gender = models.CharField(max_length=1, default='M')
+    age = models.PositiveIntegerField(default=0)
+    height = models.FloatField(default=0)
+    weight = models.FloatField(default=0)
+    diet_goal = models.CharField(max_length=20, default='maintain')
+
+    # 질병 스냅샷
+    has_diabetes = models.BooleanField(default=False)
+    has_hypertension = models.BooleanField(default=False)
+    has_hyperlipidemia = models.BooleanField(default=False)
+    has_anemia = models.BooleanField(default=False)
+    has_obesity = models.BooleanField(default=False)
+    has_metabolic_syndrome = models.BooleanField(default=False)
+    has_gout = models.BooleanField(default=False)
+    has_hyperhomocysteinemia = models.BooleanField(default=False)
+    has_ibs = models.BooleanField(default=False)
+    has_gastritis_or_ulcer = models.BooleanField(default=False)
+    has_constipation = models.BooleanField(default=False)
+    has_fatty_liver = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.user.username} - {self.date} - {self.total_grade}"
+        return f"{self.user.username} - {self.date}"

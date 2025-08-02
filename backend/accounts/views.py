@@ -66,6 +66,31 @@ def chat_api(request):
         'record': IntakeRecordSerializer(record).data
     })
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.utils import timezone
+import openai
+import json
+from .models import IntakeRecord, DailyHistory
+from .serializers import UserInfoSerializer
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.utils import timezone
+import openai
+import json
+from .models import IntakeRecord, DailyHistory
+from .serializers import UserInfoSerializer
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.utils import timezone
+import json
+import openai
+
+from .models import IntakeRecord, DailyHistory
+from .serializers import UserInfoSerializer
+
 @api_view(['POST'])
 def evaluate_daily_intake(request):
     user = request.user
@@ -73,53 +98,95 @@ def evaluate_daily_intake(request):
 
     records = IntakeRecord.objects.filter(user=user, date=today)
     if not records.exists():
-        return Response({'error': '오늘 식단 기록이 없습니다.'}, status=400)
+        return Response({'error': 'No intake records found for today.'}, status=400)
 
     all_text = "\n".join([r.content for r in records])
-
-    # 사용자 정보 요약
     profile = UserInfoSerializer(user).data
+
+    # Format health condition string for GPT
+    disease_fields = [k.replace('has_', '').replace('_', ' ').title()
+                      for k, v in profile.items() if k.startswith('has_') and v]
+    disease_summary = ', '.join(disease_fields) if disease_fields else 'None'
+
+    # GPT prompt
     prompt = f"""
-당신은 건강 전문가입니다. 다음은 사용자의 정보와 오늘의 섭취 내역입니다.
+You are a professional health consultant. Below is a user's profile and today's food/supplement intake.
 
-[사용자 정보]
-성별: {profile['gender']}, 나이: {profile['age']}, 키: {profile['height']}, 몸무게: {profile['weight']}
-질병 보유: {', '.join([k for k,v in profile.items() if k.startswith('has_') and v])}
-채식주의자 여부: {profile['is_vegetarian']}
-목표: {profile['diet_goal']}
+[User Profile]
+Gender: {profile['gender']}
+Age: {profile['age']}
+Height: {profile['height']} cm
+Weight: {profile['weight']} kg
+Health Conditions: {disease_summary}
+Vegetarian: {"Yes" if profile['is_vegetarian'] else "No"}
+Diet Goal: {profile['diet_goal']}
 
-[오늘의 섭취 내용]
+[Intake Today]
 {all_text}
 
-다음 세 가지 항목에 대해 평가해주세요. 각 항목은 '예' 또는 '아니오'로만 대답하세요.
-1. Macro 구성(탄단지) 균형이 적절한가요?
-2. 질병 상황에 맞는 식단인가요?
-3. 식단 목표에 부합하나요?
+Please evaluate the user's daily diet in the following three categories.
+
+For each category, return:
+- A score between 0 and 10 (integer)
+- A brief reason for the score (1–2 sentences, English only)
+- One suggestion for improvement (1 sentence, English only)
+
+Respond strictly in this JSON format:
+
+{{
+  "macro": {{
+    "score": <integer 0–10>,
+    "reason": "<why this macro score>",
+    "advice": "<tip to improve macro score>"
+  }},
+  "disease": {{
+    "score": <integer 0–10>,
+    "reason": "<why this disease score>",
+    "advice": "<tip to improve disease score>"
+  }},
+  "goal": {{
+    "score": <integer 0–10>,
+    "reason": "<why this goal score>",
+    "advice": "<tip to improve goal score>"
+  }}
+}}
 """
 
-    gpt_response = openai.ChatCompletion.create(
-        model='gpt-3.5-turbo',
-        messages=[
-            {"role": "user", "content": prompt}
-        ]
-    )
-    answer = gpt_response['choices'][0]['message']['content']
+    try:
+        gpt_response = openai.ChatCompletion.create(
+            model='gpt-3.5-turbo',
+            messages=[{"role": "user", "content": prompt}]
+        )
+        raw_answer = gpt_response['choices'][0]['message']['content']
+        result = json.loads(raw_answer)
 
-    def extract_score(keyword):
-        if keyword in answer and '예' in answer.split(keyword)[1][:10]:
-            return True
-        return False
+        score_macro = int(result.get('macro', {}).get('score', 0))
+        reason_macro = result.get('macro', {}).get('reason', '')
+        advice_macro = result.get('macro', {}).get('advice', '')
 
-    score_macro = extract_score('1.')
-    score_disease = extract_score('2.')
-    score_goal = extract_score('3.')
-    score_total = sum([score_macro, score_disease, score_goal])
-    grade_map = {0: 'D', 1: 'C', 2: 'B', 3: 'A'}
-    grade = grade_map[score_total]
+        score_disease = int(result.get('disease', {}).get('score', 0))
+        reason_disease = result.get('disease', {}).get('reason', '')
+        advice_disease = result.get('disease', {}).get('advice', '')
 
-    # 기존 기록 삭제 후 저장
+        score_goal = int(result.get('goal', {}).get('score', 0))
+        reason_goal = result.get('goal', {}).get('reason', '')
+        advice_goal = result.get('goal', {}).get('advice', '')
+
+    except Exception as e:
+        return Response({'error': 'Failed to parse GPT response', 'raw': raw_answer}, status=500)
+
+    score_total = score_macro + score_disease + score_goal
+    if score_total <= 4:
+        grade = 'D'
+    elif score_total <= 14:
+        grade = 'C'
+    elif score_total <= 24:
+        grade = 'B'
+    else:
+        grade = 'A'
+
     DailyHistory.objects.filter(user=user, date=today).delete()
-    history = DailyHistory.objects.create(
+    DailyHistory.objects.create(
         user=user,
         date=today,
         total_intake_text=all_text,
@@ -127,6 +194,31 @@ def evaluate_daily_intake(request):
         score_disease=score_disease,
         score_goal=score_goal,
         total_grade=grade,
+        reason_macro=reason_macro,
+        reason_disease=reason_disease,
+        reason_goal=reason_goal,
+        advice_macro=advice_macro,
+        advice_disease=advice_disease,
+        advice_goal=advice_goal,
+
+        gender=profile['gender'],
+        age=profile['age'],
+        height=profile['height'],
+        weight=profile['weight'],
+        diet_goal=profile['diet_goal'],
+
+        has_diabetes=profile.get('has_diabetes', False),
+        has_hypertension=profile.get('has_hypertension', False),
+        has_hyperlipidemia=profile.get('has_hyperlipidemia', False),
+        has_anemia=profile.get('has_anemia', False),
+        has_obesity=profile.get('has_obesity', False),
+        has_metabolic_syndrome=profile.get('has_metabolic_syndrome', False),
+        has_gout=profile.get('has_gout', False),
+        has_hyperhomocysteinemia=profile.get('has_hyperhomocysteinemia', False),
+        has_ibs=profile.get('has_ibs', False),
+        has_gastritis_or_ulcer=profile.get('has_gastritis_or_ulcer', False),
+        has_constipation=profile.get('has_constipation', False),
+        has_fatty_liver=profile.get('has_fatty_liver', False),
     )
 
     return Response({
@@ -134,9 +226,19 @@ def evaluate_daily_intake(request):
         'score_macro': score_macro,
         'score_disease': score_disease,
         'score_goal': score_goal,
+        'score_total': score_total,
+        'reason_macro': reason_macro,
+        'reason_disease': reason_disease,
+        'reason_goal': reason_goal,
+        'advice_macro': advice_macro,
+        'advice_disease': advice_disease,
+        'advice_goal': advice_goal,
         'intake_summary': all_text,
         'feedback_saved': True,
+        'raw_gpt_response': raw_answer,
     })
+
+
 
 @api_view(['GET'])
 def daily_history_list(request):
