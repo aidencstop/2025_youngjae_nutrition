@@ -126,6 +126,8 @@ Diet Goal: {profile['diet_goal']}
 
 Please evaluate the user's daily diet in the following three categories.
 
+Ignore any lines that are not related to food or supplement intake.
+
 For each category, return:
 - A score between 0 and 10 (integer)
 - A brief reason for the score (1–2 sentences, English only)
