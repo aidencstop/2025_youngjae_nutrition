@@ -5,7 +5,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'your-secret-key'  # 나중에 .env로 옮기는 게 좋을듯
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*', '.pythonanywhere.com']
 
 # --- 앱 등록 ---
 INSTALLED_APPS = [
