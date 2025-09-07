@@ -1,0 +1,165 @@
+/* 컨테이너: z-index 격리 유지 */
+.scroll-stack-container {
+  position: relative;
+  padding: 100px 0;
+  min-height: 200vh;
+  isolation: isolate;
+}
+
+/* 리스트 래퍼 */
+.scroll-stack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 카드: sticky만 유지, 페인트 비용 줄이기 */
+.scroll-stack-item {
+  position: sticky;
+  top: 10vh;
+
+  width: 100%;
+  max-width: 600px;
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
+  margin-bottom: 4rem;
+
+  /* ✅ 그림자 레이어 1개로 축소 (큰 반경/알파 줄임) */
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+
+  /* ✅ blur 강도 확 낮춤 + 지원 여부에 따라 폴백 */
+  background: rgba(26, 26, 46, 0.85);
+  /* 지원 브라우저에서만 blur(가장 무거움)를 약하게 */
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+@supports ((-webkit-backdrop-filter: blur(6px)) or (backdrop-filter: blur(6px))) {
+  .scroll-stack-item {
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    background: rgba(26, 26, 46, 0.6);
+  }
+}
+
+/* ✅ 오프스크린 최적화: 보이지 않을 때 렌더 생략 */
+.scroll-stack-item {
+  content-visibility: auto;
+  /* 추정 사이즈: 레이아웃 점프 방지 (카드 대략 높이 x 폭) */
+  contain-intrinsic-size: 600px 400px;
+
+  /* ✅ 합성 레이어 힌트: 과용 금지, 최소만 */
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  overflow: hidden;
+  color: #fff;
+}
+
+.scroll-stack-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, #77c6ff, #ff77c6, #c677ff);
+  border-radius: 24px 24px 0 0;
+  /* ✅ 상단 라인의 글로우도 살짝 완화 */
+  box-shadow: 0 0 10px rgba(119, 198, 255, 0.5);
+}
+
+.scroll-stack-item .feature-icon {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+  display: block;
+  text-align: center;
+  filter: drop-shadow(0 4px 8px rgba(119, 198, 255, 0.25));
+  text-shadow: 0 0 14px rgba(119, 198, 255, 0.6);
+}
+
+.scroll-stack-item h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  background: linear-gradient(135deg, #77c6ff, #ff77c6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 18px rgba(119, 198, 255, 0.4);
+}
+
+.scroll-stack-item p {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.75;
+  text-align: center;
+  margin: 0;
+}
+
+.scroll-stack-item .feature-details {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(119, 198, 255, 0.25);
+}
+
+.scroll-stack-item .feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0 0;
+}
+.scroll-stack-item .feature-list li {
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  color: rgba(255, 255, 255, 0.75);
+  position: relative;
+}
+.scroll-stack-item .feature-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #77c6ff;
+  font-weight: bold;
+  text-shadow: 0 0 8px rgba(119, 198, 255, 0.6);
+}
+
+.scroll-stack-item .highlight-number {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #ff77c6;
+  display: block;
+  text-align: center;
+  margin-bottom: 1rem;
+  text-shadow:
+    0 0 16px rgba(255, 119, 198, 0.7),
+    0 0 28px rgba(255, 119, 198, 0.45);
+  animation: numberGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes numberGlow {
+  from { text-shadow: 0 0 16px rgba(255,119,198,.7), 0 0 28px rgba(255,119,198,.45); }
+  to   { text-shadow: 0 0 22px rgba(255,119,198,1), 0 0 36px rgba(255,119,198,.6), 0 0 48px rgba(255,119,198,.35); }
+}
+
+/* ✅ 모션이 민감한 기기: 애니메이션/트랜지션 완화 */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-stack-item { will-change: auto; transform: none; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .scroll-stack-container { padding: 50px 0; min-height: 150vh; }
+  .scroll-stack-item { top: 5vh; padding: 2rem 1.5rem; margin-bottom: 2rem; }
+  .scroll-stack-item .feature-icon { font-size: 3rem; margin-bottom: 1.5rem; }
+  .scroll-stack-item h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+  .scroll-stack-item p { font-size: 1rem; line-height: 1.6; }
+  .scroll-stack-item .highlight-number { font-size: 2rem; }
+}
+
+@media (max-width: 480px) {
+  .scroll-stack { padding: 0 10px; }
+  .scroll-stack-item { padding: 1.5rem 1rem; }
+  .scroll-stack-item .feature-icon { font-size: 2.5rem; }
+  .scroll-stack-item h3 { font-size: 1.3rem; }
+}

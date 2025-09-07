@@ -1,15 +1,32 @@
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import Swal from 'sweetalert2';
 import api from '../api/axios';
+import './MyPage.css';
 
 const MyPage = () => {
   const [form, setForm] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const diseases = [
-    'has_diabetes', 'has_hypertension', 'has_hyperlipidemia', 'has_obesity',
-    'has_metabolic_syndrome', 'has_gout', 'has_fatty_liver', 'has_thyroid',
-    'has_gastritis', 'has_ibs', 'has_constipation', 'has_reflux',
-    'has_pancreatitis', 'has_heart_disease', 'has_stroke', 'has_anemia',
-    'has_osteoporosis', 'has_food_allergy'
+    { key: 'has_diabetes', label: 'Diabetes' },
+    { key: 'has_hypertension', label: 'Hypertension' },
+    { key: 'has_hyperlipidemia', label: 'Hyperlipidemia' },
+    { key: 'has_obesity', label: 'Obesity' },
+    { key: 'has_metabolic_syndrome', label: 'Metabolic Syndrome' },
+    { key: 'has_gout', label: 'Gout' },
+    { key: 'has_fatty_liver', label: 'Fatty Liver' },
+    { key: 'has_thyroid', label: 'Thyroid Issues' },
+    { key: 'has_gastritis', label: 'Gastritis' },
+    { key: 'has_ibs', label: 'IBS' },
+    { key: 'has_constipation', label: 'Constipation' },
+    { key: 'has_reflux', label: 'Acid Reflux' },
+    { key: 'has_pancreatitis', label: 'Pancreatitis' },
+    { key: 'has_heart_disease', label: 'Heart Disease' },
+    { key: 'has_stroke', label: 'Stroke' },
+    { key: 'has_anemia', label: 'Anemia' },
+    { key: 'has_osteoporosis', label: 'Osteoporosis' },
+    { key: 'has_food_allergy', label: 'Food Allergy' }
   ];
 
   useEffect(() => {
@@ -20,8 +37,18 @@ const MyPage = () => {
     try {
       const res = await api.get('accounts/my-info/');
       setForm(res.data);
+      setLoading(false);
     } catch (err) {
-      console.error('정보 불러오기 실패', err);
+      console.error('Failed to load information', err);
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to load your information.',
+        icon: 'error',
+        background: '#1a1a2e',
+        color: '#ffffff',
+        confirmButtonColor: '#77c6ff'
+      });
+      setLoading(false);
     }
   };
 
@@ -34,58 +61,198 @@ const MyPage = () => {
     e.preventDefault();
     try {
       await api.put('accounts/my-info/', form);
-      alert('정보가 수정되었습니다.');
+      Swal.fire({
+        title: 'Success!',
+        text: 'Your information has been updated successfully.',
+        icon: 'success',
+        background: '#1a1a2e',
+        color: '#ffffff',
+        confirmButtonColor: '#00ff88',
+        timer: 2000,
+        timerProgressBar: true
+      });
     } catch (err) {
-      alert('수정 실패');
+      Swal.fire({
+        title: 'Error!',
+        text: 'Failed to update information.',
+        icon: 'error',
+        background: '#1a1a2e',
+        color: '#ffffff',
+        confirmButtonColor: '#77c6ff'
+      });
       console.error(err);
     }
   };
 
-  if (!form) return <div className="container mt-5">로딩 중...</div>;
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="loading-spinner"></div>
+          <div className="loading-text">Loading your profile...</div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
-    <div className="container mt-4">
-      <h2>내 정보 수정</h2>
-      <form onSubmit={handleSubmit}>
-        <input className="form-control my-2" value={form.name} name="name" onChange={handleChange} placeholder="이름" />
-        <input className="form-control my-2" value={form.age} name="age" onChange={handleChange} placeholder="나이" type="number" />
-        <input className="form-control my-2" value={form.height} name="height" onChange={handleChange} placeholder="키(cm)" type="number" />
-        <input className="form-control my-2" value={form.weight} name="weight" onChange={handleChange} placeholder="몸무게(kg)" type="number" />
+    <div className="mypage-container">
+      <div className="mypage-content">
+        <motion.div
+          className="mypage-header"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <h1 className="mypage-title">My Profile</h1>
+          <p className="mypage-subtitle">
+            Update your personal information and health preferences
+          </p>
+        </motion.div>
 
-        <div className="form-group my-2">
-          <label className="me-2">성별:</label>
-          <select name="gender" className="form-select" value={form.gender} onChange={handleChange}>
-            <option value="M">남성</option>
-            <option value="F">여성</option>
-          </select>
-        </div>
-
-        <div className="form-group my-2">
-          <label>질병 보유 여부:</label><br />
-          {diseases.map((d) => (
-            <div key={d} className="form-check form-check-inline">
-              <input className="form-check-input" type="checkbox" name={d} checked={form[d]} onChange={handleChange} />
-              <label className="form-check-label">{d.replace('has_', '').replaceAll('_', ' ')}</label>
+        <motion.form
+          className="profile-form"
+          onSubmit={handleSubmit}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          {/* Basic Information */}
+          <div className="form-section">
+            <h3 className="section-title">
+              👤 Basic Information
+            </h3>
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">Name</label>
+                <input
+                  className="form-input"
+                  value={form.name || ''}
+                  name="name"
+                  onChange={handleChange}
+                  placeholder="Enter your name"
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Age</label>
+                <input
+                  className="form-input"
+                  value={form.age || ''}
+                  name="age"
+                  onChange={handleChange}
+                  placeholder="Enter your age"
+                  type="number"
+                />
+              </div>
             </div>
-          ))}
-        </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">Height (cm)</label>
+                <input
+                  className="form-input"
+                  value={form.height || ''}
+                  name="height"
+                  onChange={handleChange}
+                  placeholder="Enter your height"
+                  type="number"
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Weight (kg)</label>
+                <input
+                  className="form-input"
+                  value={form.weight || ''}
+                  name="weight"
+                  onChange={handleChange}
+                  placeholder="Enter your weight"
+                  type="number"
+                />
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label className="form-label">Gender</label>
+                <select
+                  name="gender"
+                  className="form-select"
+                  value={form.gender || 'M'}
+                  onChange={handleChange}
+                >
+                  <option value="M">Male</option>
+                  <option value="F">Female</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label className="form-label">Diet Goal</label>
+                <select
+                  name="diet_goal"
+                  className="form-select"
+                  value={form.diet_goal || 'maintain'}
+                  onChange={handleChange}
+                >
+                  <option value="loss">Weight Loss</option>
+                  <option value="maintain">Maintain Weight</option>
+                  <option value="gain">Muscle Gain</option>
+                </select>
+              </div>
+            </div>
+          </div>
 
-        <div className="form-check my-2">
-          <input className="form-check-input" type="checkbox" name="is_vegetarian" checked={form.is_vegetarian} onChange={handleChange} />
-          <label className="form-check-label">채식주의자</label>
-        </div>
+          {/* Health Conditions */}
+          <div className="form-section">
+            <div className="diseases-section">
+              <h3 className="diseases-title">
+                🏥 Health Conditions
+              </h3>
+              <div className="diseases-grid">
+                {diseases.map((disease) => (
+                  <motion.div
+                    key={disease.key}
+                    className={`checkbox-item ${form[disease.key] ? 'checked' : ''}`}
+                    onClick={() => setForm({ ...form, [disease.key]: !form[disease.key] })}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <div className={`custom-checkbox ${form[disease.key] ? 'checked' : ''}`}></div>
+                    <span className="checkbox-label">{disease.label}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
 
-        <div className="form-group my-2">
-          <label className="me-2">식단 목표:</label>
-          <select name="diet_goal" className="form-select" value={form.diet_goal} onChange={handleChange}>
-            <option value="loss">체중 감량</option>
-            <option value="maintain">현상 유지</option>
-            <option value="gain">근육 증량</option>
-          </select>
-        </div>
+          {/* Diet Preferences */}
+          <div className="form-section">
+            <div className="diet-preferences">
+              <h3 className="preferences-title">
+                🌱 Diet Preferences
+              </h3>
+              <motion.div
+                className={`vegetarian-option ${form.is_vegetarian ? 'checked' : ''}`}
+                onClick={() => setForm({ ...form, is_vegetarian: !form.is_vegetarian })}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className={`custom-checkbox ${form.is_vegetarian ? 'checked' : ''}`}></div>
+                <span className="checkbox-label">Vegetarian</span>
+              </motion.div>
+            </div>
+          </div>
 
-        <button className="btn btn-primary mt-3" type="submit">저장하기</button>
-      </form>
+          <motion.button
+            className="submit-button"
+            type="submit"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            Update Profile
+          </motion.button>
+        </motion.form>
+      </div>
     </div>
   );
 };

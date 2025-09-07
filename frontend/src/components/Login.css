@@ -1,0 +1,433 @@
+/* Login Page - Cyberpunk Styling */
+
+/* Container */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+}
+
+/* Background Elements */
+.login-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.cyber-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(119, 198, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(119, 198, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 20s linear infinite;
+}
+
+.neon-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(119, 198, 255, 0.1) 0%,
+    rgba(119, 198, 255, 0.05) 30%,
+    transparent 70%
+  );
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+/* Login Card */
+.login-card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 420px;
+  padding: 40px;
+  background: rgba(26, 26, 46, 0.95);
+  border: 1px solid rgba(119, 198, 255, 0.3);
+  border-radius: 20px;
+  box-shadow: 
+    0 0 50px rgba(119, 198, 255, 0.2),
+    inset 0 0 50px rgba(119, 198, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    transparent 30%, 
+    rgba(119, 198, 255, 0.5) 50%, 
+    transparent 70%
+  );
+  border-radius: 20px;
+  z-index: -1;
+  animation: borderGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes borderGlow {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.8; }
+}
+
+/* Logo Section */
+.login-logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-logo img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+  box-shadow: 0 0 20px rgba(119, 198, 255, 0.5);
+  animation: logoFloat 3s ease-in-out infinite;
+}
+
+.login-logo h1 {
+  color: #77c6ff;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 0 20px rgba(119, 198, 255, 0.5);
+  letter-spacing: 2px;
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Header */
+.login-header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.login-header h2 {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.login-header p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Form */
+.login-form {
+  margin-bottom: 30px;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(119, 198, 255, 0.7);
+  font-size: 16px;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.cyber-input {
+  width: 100%;
+  padding: 15px 20px 15px 50px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(119, 198, 255, 0.3);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.cyber-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.cyber-input:focus {
+  border-color: #77c6ff;
+  box-shadow: 
+    0 0 0 2px rgba(119, 198, 255, 0.2),
+    0 0 20px rgba(119, 198, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.cyber-input:focus + .input-icon {
+  color: #77c6ff;
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Button */
+.cyber-button {
+  position: relative;
+  width: 100%;
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #77c6ff 0%, #4a9eff 100%);
+  border: none;
+  border-radius: 12px;
+  color: #000000;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.cyber-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.cyber-button:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 20px rgba(119, 198, 255, 0.3),
+    0 0 30px rgba(119, 198, 255, 0.5);
+}
+
+.button-text {
+  position: relative;
+  z-index: 2;
+}
+
+.button-glow {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.cyber-button:hover .button-glow {
+  left: 100%;
+}
+
+/* Footer Links */
+.login-footer {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cyber-link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.cyber-link span {
+  color: #77c6ff;
+  font-weight: 600;
+}
+
+.cyber-link:hover {
+  color: #77c6ff;
+  text-shadow: 0 0 10px rgba(119, 198, 255, 0.5);
+}
+
+.cyber-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: #77c6ff;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.cyber-link:hover::after {
+  width: 100%;
+}
+
+/* Floating Particles */
+.floating-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #77c6ff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #77c6ff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-card {
+    margin: 20px;
+    padding: 30px 25px;
+  }
+  
+  .login-logo h1 {
+    font-size: 24px;
+  }
+  
+  .login-header h2 {
+    font-size: 20px;
+  }
+  
+  .cyber-input {
+    padding: 12px 15px 12px 45px;
+    font-size: 14px;
+  }
+  
+  .input-icon {
+    left: 12px;
+    font-size: 14px;
+  }
+  
+  .cyber-button {
+    padding: 12px 25px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    margin: 15px;
+    padding: 25px 20px;
+  }
+  
+  .login-footer {
+    gap: 12px;
+  }
+  
+  .cyber-link {
+    font-size: 13px;
+  }
+}
+
+/* SweetAlert2 Custom Styling */
+/* .cyber-alert {
+  border: 1px solid rgba(119, 198, 255, 0.3) !important;
+  border-radius: 20px !important;
+  box-shadow: 
+    0 0 50px rgba(119, 198, 255, 0.2),
+    inset 0 0 50px rgba(119, 198, 255, 0.05) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+
+.cyber-alert::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, 
+    transparent 30%, 
+    rgba(119, 198, 255, 0.3) 50%, 
+    transparent 70%
+  );
+  border-radius: 20px;
+  z-index: -1;
+  animation: borderGlow 3s ease-in-out infinite alternate;
+}
+
+.cyber-alert-title {
+  color: #77c6ff !important;
+  text-shadow: 0 0 20px rgba(119, 198, 255, 0.5) !important;
+  font-weight: 600 !important;
+}
+
+.cyber-alert-content {
+  color: rgba(255, 255, 255, 0.8) !important;
+} */
+
+/* SweetAlert2 Button Override */
+/* .swal2-confirm {
+  background: linear-gradient(135deg, #77c6ff 0%, #4a9eff 100%) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  transition: all 0.3s ease !important;
+}
+
+.swal2-confirm:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 
+    0 10px 20px rgba(119, 198, 255, 0.3),
+    0 0 30px rgba(119, 198, 255, 0.5) !important;
+} */
+
+/* SweetAlert2 Timer Progress Bar */
+/* .swal2-timer-progress-bar {
+  background: linear-gradient(90deg, #77c6ff 0%, #4a9eff 100%) !important;
+  height: 3px !important;
+} */
+
+/* SweetAlert2 Icon Custom */
+/* .swal2-success-circular-line-left,
+.swal2-success-circular-line-right {
+  background-color: #77c6ff !important;
+}
+
+.swal2-success-fix {
+  background-color: #77c6ff !important;
+}
+
+.swal2-error-x {
+  color: #ff6b6b !important;
+} */

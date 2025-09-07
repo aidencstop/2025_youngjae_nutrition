@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Swal from 'sweetalert2';
 import api from '../api/axios';
 import Logo from '../assets/image/logo.png';
 import './Register.css';
@@ -51,11 +50,11 @@ const Register = () => {
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
+    visible: { 
+      opacity: 1, 
       scale: 1,
-      transition: {
-        duration: 0.6,
+      transition: { 
+        duration: 0.6, 
         ease: "easeOut",
         staggerChildren: 0.1
       }
@@ -64,8 +63,8 @@ const Register = () => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
+    visible: { 
+      opacity: 1, 
       y: 0,
       transition: { duration: 0.5, ease: "easeOut" }
     }
@@ -73,12 +72,12 @@ const Register = () => {
 
   const logoVariants = {
     hidden: { opacity: 0, scale: 0.5, rotate: -180 },
-    visible: {
-      opacity: 1,
-      scale: 1,
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
       rotate: 0,
-      transition: {
-        duration: 0.8,
+      transition: { 
+        duration: 0.8, 
         ease: "easeOut",
         type: "spring",
         stiffness: 100
@@ -93,70 +92,21 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     if (form.password !== form.password2) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Password Mismatch',
-        text: 'Please make sure your passwords match',
-        background: 'rgba(26, 26, 46, 0.95)',
-        color: '#ffffff',
-        iconColor: '#ffa726',
-        confirmButtonColor: '#77c6ff',
-        confirmButtonText: 'OK',
-        customClass: {
-          popup: 'cyber-alert',
-          title: 'cyber-alert-title',
-          content: 'cyber-alert-content'
-        }
-      });
+      alert('비밀번호가 일치하지 않습니다.');
       return;
     }
 
     setIsLoading(true);
-
+    
     try {
       await api.post('accounts/register/', form);
-
-      // 회원가입 성공 메시지
-      await Swal.fire({
-        icon: 'success',
-        title: 'Registration Successful!',
-        text: 'Welcome to NutriLens! Redirecting to login...',
-        background: 'rgba(26, 26, 46, 0.95)',
-        color: '#ffffff',
-        iconColor: '#77c6ff',
-        confirmButtonColor: '#77c6ff',
-        confirmButtonText: 'Continue',
-        timer: 2000,
-        timerProgressBar: true,
-        showConfirmButton: false,
-        customClass: {
-          popup: 'cyber-alert',
-          title: 'cyber-alert-title',
-          content: 'cyber-alert-content'
-        }
-      });
-
+      alert('회원가입 완료!');
       navigate('/login');
     } catch (err) {
       const msg = err.response?.data;
-
-      Swal.fire({
-        icon: 'error',
-        title: 'Registration Failed',
-        text: `Registration failed: ${JSON.stringify(msg)}`,
-        background: 'rgba(26, 26, 46, 0.95)',
-        color: '#ffffff',
-        iconColor: '#ff6b6b',
-        confirmButtonColor: '#77c6ff',
-        confirmButtonText: 'Try Again',
-        customClass: {
-          popup: 'cyber-alert',
-          title: 'cyber-alert-title',
-          content: 'cyber-alert-content'
-        }
-      });
+      alert("회원가입 실패: " + JSON.stringify(msg));
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -172,14 +122,14 @@ const Register = () => {
       </div>
 
       {/* Register Card */}
-      <motion.div
+      <motion.div 
         className="register-card"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         {/* Logo */}
-        <motion.div
+        <motion.div 
           className="register-logo"
           variants={logoVariants}
         >
@@ -188,7 +138,7 @@ const Register = () => {
         </motion.div>
 
         {/* Welcome Text */}
-        <motion.div
+        <motion.div 
           className="register-header"
           variants={itemVariants}
         >
@@ -197,7 +147,7 @@ const Register = () => {
         </motion.div>
 
         {/* Register Form */}
-        <motion.form
+        <motion.form 
           className="register-form"
           onSubmit={handleSubmit}
           variants={itemVariants}
@@ -205,7 +155,7 @@ const Register = () => {
           {/* Basic Info Section */}
           <div className="form-section">
             <h3 className="section-title">Account Information</h3>
-
+            
             <motion.div className="input-group" variants={itemVariants}>
               <i className="fas fa-user input-icon"></i>
               <input
@@ -256,7 +206,7 @@ const Register = () => {
           {/* Physical Info Section */}
           <div className="form-section">
             <h3 className="section-title">Physical Information</h3>
-
+            
             <div className="input-row">
               <motion.div className="input-group half" variants={itemVariants}>
                 <i className="fas fa-calendar input-icon"></i>
@@ -314,7 +264,7 @@ const Register = () => {
           {/* Health Info Section */}
           <div className="form-section">
             <h3 className="section-title">Health & Diet Preferences</h3>
-
+            
             <motion.div className="input-group" variants={itemVariants}>
               <i className="fas fa-target input-icon"></i>
               <select
@@ -360,12 +310,12 @@ const Register = () => {
             </motion.div>
           </div>
 
-          <motion.button
+          <motion.button 
             className="cyber-button"
             type="submit"
             disabled={isLoading}
             variants={itemVariants}
-            whileHover={{
+            whileHover={{ 
               scale: 1.05,
               boxShadow: "0 0 30px rgba(119, 198, 255, 0.6)"
             }}
@@ -379,7 +329,7 @@ const Register = () => {
         </motion.form>
 
         {/* Footer Links */}
-        <motion.div
+        <motion.div 
           className="register-footer"
           variants={itemVariants}
         >
@@ -395,7 +345,7 @@ const Register = () => {
           <motion.div
             key={i}
             className="particle"
-            initial={{
+            initial={{ 
               opacity: 0,
               x: Math.random() * window.innerWidth,
               y: Math.random() * window.innerHeight

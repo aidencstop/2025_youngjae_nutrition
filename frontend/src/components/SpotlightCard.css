@@ -1,0 +1,145 @@
+.card-spotlight {
+  position: relative;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(119, 198, 255, 0.3);
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(22, 33, 62, 0.95));
+  padding: 2rem;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(119, 198, 255, 0.2);
+  transition: all 0.3s ease;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  --spotlight-color: rgba(119, 198, 255, 0.15);
+}
+
+.card-spotlight::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x) var(--mouse-y), 
+    var(--spotlight-color), 
+    transparent 80%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card-spotlight:hover::before,
+.card-spotlight:focus-within::before {
+  opacity: 1;
+}
+
+.card-spotlight:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(119, 198, 255, 0.3),
+    0 0 0 1px rgba(119, 198, 255, 0.4);
+}
+
+.card-spotlight * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Icon styling for spotlight cards */
+.card-spotlight .feature-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  display: block;
+  text-align: center;
+  filter: drop-shadow(0 0 20px rgba(119, 198, 255, 0.5));
+}
+
+.card-spotlight .feature-icon .icon-image {
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 0 15px rgba(119, 198, 255, 0.4));
+  transition: all 0.3s ease;
+}
+
+.card-spotlight:hover .feature-icon .icon-image {
+  filter: drop-shadow(0 0 25px rgba(119, 198, 255, 0.8));
+  transform: scale(1.05);
+}
+
+.card-spotlight h3 {
+  color: #ffffff;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-align: center;
+  background: linear-gradient(135deg, #77c6ff, #ff77c6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-spotlight p {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  text-align: center;
+  margin: 0;
+}
+
+/* Step number styling for spotlight cards */
+.card-spotlight .step-number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #ff77c6;
+  display: block;
+  text-align: center;
+  margin-bottom: 1rem;
+  text-shadow: 
+    0 0 20px rgba(255, 119, 198, 0.8),
+    0 0 40px rgba(255, 119, 198, 0.5);
+  animation: stepGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes stepGlow {
+  from {
+    text-shadow: 
+      0 0 20px rgba(255, 119, 198, 0.8),
+      0 0 40px rgba(255, 119, 198, 0.5);
+  }
+  to {
+    text-shadow: 
+      0 0 30px rgba(255, 119, 198, 1),
+      0 0 50px rgba(255, 119, 198, 0.7),
+      0 0 70px rgba(255, 119, 198, 0.4);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .card-spotlight {
+    padding: 1.5rem;
+  }
+  
+  .card-spotlight .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .card-spotlight .feature-icon .icon-image {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .card-spotlight h3 {
+    font-size: 1.5rem;
+  }
+  
+  .card-spotlight .step-number {
+    font-size: 2rem;
+  }
+}
