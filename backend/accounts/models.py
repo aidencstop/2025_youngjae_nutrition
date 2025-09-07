@@ -143,3 +143,20 @@ class DailyHistory(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.date}"
+
+from django.db import models
+from django.conf import settings
+
+def intake_image_upload_path(instance, filename):
+    # 사용자별/날짜별 폴더로 저장
+    return f'intake_images/user_{instance.user_id}/{instance.date}/{filename}'
+
+class IntakeImage(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='intake_images')
+    image = models.ImageField(upload_to=intake_image_upload_path)
+    note = models.TextField(blank=True)
+    date = models.DateField()  # 우리 규칙: 새벽 3시 이전은 전날로 귀속
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']

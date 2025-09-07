@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, IntakeRecord, DailyHistory
+from .models import CustomUser, IntakeRecord, DailyHistory, IntakeImage
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
@@ -75,3 +75,9 @@ class DailyHistoryAdmin(admin.ModelAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(IntakeRecord)
+
+@admin.register(IntakeImage)
+class IntakeImageAdmin(admin.ModelAdmin):
+    list_display = ('user', 'date', 'created_at', 'image', 'note')
+    list_filter = ('date',)
+    search_fields = ('user__username', 'note')

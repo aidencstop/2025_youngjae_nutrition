@@ -55,3 +55,14 @@ class DailyHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = DailyHistory
         fields = '__all__'
+
+from rest_framework import serializers
+from .models import IntakeRecord, IntakeImage
+
+class IntakeImageSerializer(serializers.ModelSerializer):
+    # user를 사람이 읽기 좋은 형태로 노출 (원하면 제거 가능)
+    user = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = IntakeImage
+        fields = ['user', 'image', 'note', 'date', 'created_at']  # id 제외

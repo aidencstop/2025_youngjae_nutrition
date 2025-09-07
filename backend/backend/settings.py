@@ -103,3 +103,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # --- GPT API Key (임시, 나중에 .env 처리 권장) ---
 OPENAI_API_KEY = ''
+
+import os
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
