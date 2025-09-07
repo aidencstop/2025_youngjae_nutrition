@@ -6,6 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'your-secret-key'  # 나중에 .env로 옮기는 게 좋을듯
 DEBUG = True
 ALLOWED_HOSTS = ['*', '.pythonanywhere.com']
+CSRF_TRUSTED_ORIGINS = ["https://username.pythonanywhere.com"]
 
 # --- 앱 등록 ---
 INSTALLED_APPS = [
@@ -41,7 +42,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'backend/templates'],
+        "DIRS": [BASE_DIR / "frontend_build"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -94,7 +95,10 @@ USE_TZ = True
 
 # --- 정적/미디어 파일 ---
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'frontend' / 'dist']
+STATICFILES_DIRS = [
+    BASE_DIR / 'frontend' / 'dist',
+BASE_DIR / "backend" / "frontend_build" / "assets",
+]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
