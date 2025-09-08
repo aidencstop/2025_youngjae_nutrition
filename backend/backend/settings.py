@@ -5,7 +5,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'your-secret-key'  # 나중에 .env로 옮기는 게 좋을듯
 DEBUG = False
-ALLOWED_HOSTS = ['*', '.pythonanywhere.com']
+ALLOWED_HOSTS = ['*', '.pythonanywhere.com', '2025-youngjae-nutrition.vercel.app']
 CSRF_TRUSTED_ORIGINS = ["https://username.pythonanywhere.com"]
 
 # --- 앱 등록 ---
