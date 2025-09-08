@@ -6,7 +6,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'your-secret-key'  # 나중에 .env로 옮기는 게 좋을듯
 DEBUG = False
 ALLOWED_HOSTS = ['*', '.pythonanywhere.com', '2025-youngjae-nutrition.vercel.app']
-CSRF_TRUSTED_ORIGINS = ["https://username.pythonanywhere.com"]
+# CORS/CSRF: Vercel 도메인과 커스텀 도메인 추가
+CORS_ALLOWED_ORIGINS = [
+    'https://2025-youngjae-nutrition.vercel.app',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://2025-youngjae-nutrition.vercel.app',
+]
 
 # --- 앱 등록 ---
 INSTALLED_APPS = [
@@ -95,10 +102,7 @@ USE_TZ = True
 
 # --- 정적/미디어 파일 ---
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / 'frontend' / 'dist',
-BASE_DIR / "backend" / "frontend_build" / "assets",
-]
+
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -114,13 +118,3 @@ OPENAI_API_KEY = ''
 import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# CORS/CSRF: Vercel 도메인과 커스텀 도메인 추가
-CORS_ALLOWED_ORIGINS = [
-    'https://your-frontend.vercel.app',
-    'https://your-domain.com',
-]
-CSRF_TRUSTED_ORIGINS = [
-    'https://your-frontend.vercel.app',
-    'https://your-domain.com',
-]
