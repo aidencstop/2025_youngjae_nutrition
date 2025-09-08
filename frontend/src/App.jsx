@@ -8,7 +8,7 @@ import FoodAnalyze from './components/FoodAnalyze';
 import IntakeHistory from './components/IntakeHistory';
 import MyPage from './components/MyPage';
 import PrivateRoute from './routes/PrivateRoute';
-import Navbar from './components/Navbar';  // ✅ 추가
+import Navbar from './components/NavBar';  // ✅ 추가
 
 function App() {
   return (
