@@ -2,7 +2,7 @@ import openai
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.utils import timezone
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -32,6 +32,11 @@ def register_view(request):
 def login_view(request):
     username = request.data.get('username')
     password = request.data.get('password')
+    if not username or not password:
+        return Response(
+            {'detail': 'username and password are required.'},
+            status=400
+        )
     user = authenticate(request, username=username, password=password)
     if user is not None:
         token, _ = Token.objects.get_or_create(user=user)
