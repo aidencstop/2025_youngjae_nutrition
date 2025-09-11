@@ -4,7 +4,7 @@ from pathlib import Path
 # --- 기본 설정 ---
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'your-secret-key'  # 나중에 .env로 옮기는 게 좋을듯
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['*', '.pythonanywhere.com', '2025-youngjae-nutrition.vercel.app']
 # CORS/CSRF: Vercel 도메인과 커스텀 도메인 추가
 CORS_ALLOWED_ORIGINS = [

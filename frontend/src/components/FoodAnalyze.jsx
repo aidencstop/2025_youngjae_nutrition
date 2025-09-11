@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Swal from 'sweetalert2';
 import Typewriter from 'typewriter-effect';
 import api from '../api/axios';
-import './FoodAnalyze.css';
+
 import SimpleChat from '../assets/image/SimpleChat.png';
 import ImageAnalysis from '../assets/image/ImageAnalysis.png';
 import Hybrid from '../assets/image/Hybrid.png';
 import AI from '../assets/image/AI.png';
 import { useNavigate } from 'react-router-dom';
+import './FoodAnalyze.css';
 
 // TypewriterMessage 컴포넌트를 외부로 분리 - React.memo로 최적화
 const TypewriterMessage = React.memo(({ text, messageId, onComplete }) => {
