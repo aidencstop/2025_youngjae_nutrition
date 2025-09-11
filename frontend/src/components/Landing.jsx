@@ -11,7 +11,7 @@ import '../styles/Landing.css';
 import ScrollStack, { ScrollStackItem } from './ScrollStack';
 import SpotlightCard from './SpotlightCard';
 import Footer from './Footer';
-import NavBar from './NavBar';
+import NavBar from './Navbar';
 
 
 const Landing = () => {

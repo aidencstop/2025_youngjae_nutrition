@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const baseURL = import.meta?.env?.VITE_API_BASE_URL || '/api';
-
+//const baseURL = import.meta?.env?.VITE_API_BASE_URL || '/api';
+const baseURL = "http://localhost:8000"
 const api = axios.create({
   baseURL,          // 절대 http://localhost:8000 쓰지 말 것
   timeout: 20000,
