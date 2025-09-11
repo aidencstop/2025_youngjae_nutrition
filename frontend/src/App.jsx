@@ -9,9 +9,11 @@ import IntakeHistory from './components/IntakeHistory';
 import MyPage from './components/MyPage';
 import PrivateRoute from './routes/PrivateRoute';
 import Navbar from './components/NavBar';  // ✅ 추가
-import './styles/style.css';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles/style.css';
 import './index.css';
+
 function App() {
   return (
     <Router>

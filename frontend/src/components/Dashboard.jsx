@@ -119,6 +119,8 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+        <button className="btn btn-primary">Test Button</button>
+
       {/* Cyberpunk Background */}
       <div className="dashboard-background">
         <div className="cyber-grid"></div>
