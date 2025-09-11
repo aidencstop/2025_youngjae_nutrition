@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://alexyjkim.pythonanywhere.com/api/:path*" },
+    { "source": "/api/(.*)", "destination": "https://alexyjkim.pythonanywhere.com/api/$1" },
     { "source": "/((?!api|assets|.*\\..*).*)", "destination": "/" }
   ]
 }
